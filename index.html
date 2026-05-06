@@ -960,6 +960,43 @@ body::after{
   .welcome-grid { grid-template-columns: 1fr !important; }
 }
 
+/* Mobile: center kissu-stack and follow-popup reliably
+   (drop the left:50% trick that drifts inside padded parents) */
+@media (max-width: 720px) {
+  .avatar-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .kissu-stack {
+    left: auto !important;
+    width: min(360px, 100%) !important;
+    height: auto !important;
+    aspect-ratio: 390 / 286;
+    transform: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .kissu-stack.kissu-lifted {
+    transform: translateY(-26px) !important;
+  }
+  .follow-popup {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Disable double-tap-to-zoom around the Give Love button so a slipped tap
+   doesn't zoom the page. Pinch-zoom still works. */
+html { touch-action: manipulation; }
+.love-btn,
+.avatar-box,
+.kissu-stack,
+.follow-popup,
+.love-note {
+  touch-action: manipulation;
+}
+
 .love-btn,
 .love-note {
   transition: transform 0.7s cubic-bezier(0.22, 0.7, 0.25, 1);
