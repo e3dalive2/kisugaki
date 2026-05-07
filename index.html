@@ -183,6 +183,10 @@ body {
   max-width: 860px;
   margin: 0 auto;
   padding: 0 12px 120px;
+  pointer-events: none;          /* let clicks fall through empty padding */
+}
+.site-wrapper > * {
+  pointer-events: auto;          /* but real content stays interactive */
 }
 
 /* ══ BANNER ══ */
@@ -213,11 +217,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   border: 1.5px solid rgba(255,255,255,0.92);
   box-shadow: 0 4px 20px rgba(190,180,255,0.14);
-  flex-wrap: wrap;
+}
 
+.nav-wrap nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 4px;
+  width: 100%;
 }
 
 nav button {
@@ -232,6 +242,20 @@ nav button {
   cursor: pointer;
   transition: all 0.22s cubic-bezier(.34,1.56,.64,1);
   white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .nav-wrap {
+    border-radius: 26px;
+    padding: 8px 10px;
+  }
+  .nav-wrap nav {
+    gap: 4px 6px;
+  }
+  nav button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
 nav button:hover, nav button.active {
   background: linear-gradient(135deg, var(--pink), var(--lilac));
@@ -814,6 +838,102 @@ nav button:hover, nav button.active {
 .supp-card h4 { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pink-d); margin-bottom: 8px; }
 .supp-card p  { font-size: 13px; line-height: 1.72; color: var(--text); }
 
+/* ══ LEGAL FOOTER LINKS (snug against 🐚🌺, behind scrollable panels) ══ */
+.legal-links {
+  position: fixed;
+  right: 75px;           /* snug to the LEFT of the .bottom-deco-r cluster */
+  bottom: 26px;          /* same vertical level as the bottom-right decorations */
+  z-index: 2;            /* above the sand, BELOW the .site-wrapper panels (z:3) */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'Nunito', sans-serif;
+  pointer-events: auto;
+}
+.legal-links a,
+.legal-links a:link,
+.legal-links a:visited,
+.legal-links a:active {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  color: rgba(120, 70, 30, 0.9);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.55);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: color 0.2s, transform 0.2s;
+}
+.legal-links a:hover {
+  color: var(--pink-d);
+  transform: translateY(-1px);
+}
+@media (max-width: 560px) {
+  .legal-links { right: 72px; bottom: 18px; }
+  .legal-links a,
+  .legal-links a:link,
+  .legal-links a:visited,
+  .legal-links a:active { font-size: 10px; letter-spacing: 0.5px; }
+}
+
+/* ══ COMMERCIAL DISCLOSURE PAGE ══ */
+.disclosure-card {
+  background: rgba(255,255,255,0.96);
+  border-radius: 18px;
+  padding: 18px 22px;
+  border: 1.5px solid rgba(255,255,255,0.95);
+  box-shadow: 0 4px 18px rgba(190,180,255,0.18);
+  margin-bottom: 14px;
+}
+.disclosure-card h4 {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--pink-d);
+  margin-bottom: 8px;
+}
+.disclosure-card p,
+.disclosure-card li {
+  font-size: 13px;
+  line-height: 1.72;
+  color: var(--text);
+}
+.disclosure-card p + p { margin-top: 6px; }
+.disclosure-card ul {
+  margin: 6px 0 0 0;
+  padding-left: 18px;
+}
+.disclosure-card a {
+  color: var(--pink-d);
+  text-decoration: none;
+  font-weight: 700;
+}
+.disclosure-card a:hover { text-decoration: underline; }
+.biz-info-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.biz-info-grid dt {
+  font-weight: 800;
+  color: var(--text);
+}
+.biz-info-grid dd {
+  font-weight: 500;
+  color: var(--text-m);
+}
+@media (max-width: 560px) {
+  .biz-info-grid { grid-template-columns: 1fr; gap: 2px 0; }
+  .biz-info-grid dt { margin-top: 8px; }
+}
+
 /* ══ FOOTER ══ */
 footer {
   text-align: center;
@@ -979,6 +1099,12 @@ body::after{
   }
   .kissu-stack.kissu-lifted {
     transform: translateY(-26px) !important;
+  }
+  /* Scale avatar with the stack so the seashell stays visible behind it */
+  .kissu-stack .avatar-img--photo {
+    width: 41.5% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
   }
   .follow-popup {
     margin-left: auto !important;
@@ -1173,7 +1299,6 @@ html { touch-action: manipulation; }
       <button class="active" onclick="showPage('about',this)"><span>🏠 About</span></button>
       <button onclick="showPage('shops',this)"><span>🛍 Shops & Services</span></button>
       <button onclick="showPage('faq',this)"><span>❓ FAQ</span></button>
-      <button onclick="showPage('tos',this)"><span>📜 Policies & TOS</span></button>
       <button onclick="showPage('contact',this)"><span>✉️ Support & Contact</span></button>
     </nav>
   </div>
@@ -1412,104 +1537,107 @@ html { touch-action: manipulation; }
   <!-- ══════════════ POLICIES & TOS PAGE (general/assets) ══════════════ -->
   <div class="page" id="page-tos">
 
-    <!-- Header / notice panel -->
-    <div class="panel">
-      <div class="panel-title">Policies & Terms of Service</div>
-      <div class="tos-note" style="margin-bottom:0">
-        By purchasing, downloading, or using these assets, you agree to the current Policies and Terms of Service.<br><br>
-        These policies and terms may be updated at any time. Updated terms apply to future purchases only and do not retroactively affect products purchased under previous versions of the Terms of Service.
+      <!-- Header / notice panel -->
+      <div class="panel">
+          <div class="panel-title">Policies & Terms of Service</div>
+          <div class="tos-note" style="margin-bottom:0">
+              By purchasing, downloading, or using these assets, you agree to the current Policies and Terms of Service.<br><br>
+              These policies and terms may be updated at any time. Updated terms apply to future purchases only and do not retroactively affect products purchased under previous versions of the Terms of Service.
+          </div>
       </div>
-    </div>
 
-    <!-- Refund Policy accordion -->
-    <div class="accordion policies-acc open" id="acc-refund">
-      <div class="acc-header" onclick="toggleAcc('acc-refund')">
-        💸 Refund Policy
-        <em class="acc-arrow">▼</em>
+    
+      <!-- Privacy Policy accordion -->
+      <div class="accordion policies-acc open" id="acc-privacy">
+          <div class="acc-header" onclick="toggleAcc('acc-privacy')">
+              🔒 Privacy Policy
+              <em class="acc-arrow">▼</em>
+          </div>
+          <div class="acc-body">
+              <p class="policy-p">This website may collect customer information such as email addresses for customer support and communication purposes.</p>
+              <p class="policy-p">Personal information is not sold or shared with third parties.</p>
+              <p class="policy-p">Payments and digital product delivery may be processed through third-party services such as BOOTH, Payhip, Stripe, or other payment providers, which may process customer data according to their own privacy policies.</p>
+          </div>
       </div>
-      <div class="acc-body">
-        <p class="policy-p">All products sold are digital products.</p>
-        <p class="policy-p">Due to the nature of downloadable digital content, refunds and exchanges are generally not available after purchase.</p>
-        <p class="policy-p">If you experience issues with your files, please contact the shop through the platform where the product was purchased (BOOTH or Payhip), or through Twitter/X for assistance.</p>
-      </div>
-    </div>
 
-    <!-- Privacy Policy accordion -->
-    <div class="accordion policies-acc open" id="acc-privacy">
-      <div class="acc-header" onclick="toggleAcc('acc-privacy')">
-        🔒 Privacy Policy
-        <em class="acc-arrow">▼</em>
+            
+      <!-- Terms of Service accordion -->
+      <div class="accordion policies-acc open" id="acc-tos">
+          <div class="acc-header" onclick="toggleAcc('acc-tos')">
+              📜 Terms of Service
+              <em class="acc-arrow">▼</em>
+          </div>
+          <div class="acc-body">
+              <div class="tos-block">
+                  <p><strong>About</strong><br>This store provides digital 3D assets, VRChat assets, textures, accessories, and related downloadable content. All products are digital downloads only. No physical products are shipped.</p>
+              </div>
+              <div class="tos-block">
+                  <p><strong>License &amp; Personal Use</strong><br>You may:</p>
+                  <ul style="margin-top:6px;padding-left:16px;font-size:13px;color:var(--text);line-height:2">
+                      <li>Use the assets for personal use</li>
+                      <li>Modify models and textures for personal use</li>
+                      <li>Create private edits or commission work, provided both the buyer and creator own a legitimate copy of the asset</li>
+                  </ul>
+                  <p style="margin-top:8px;font-size:13px;color:var(--text)">We cannot provide support for issues caused by unsupported models or personal modifications.</p>
+              </div>
+              <div class="tos-block">
+                  <p><strong>Commercial Use</strong><br>Commercial use in games, video productions, streams/content creation, merchandise, and publications may be permitted upon request.</p>
+              </div>
+              <div class="tos-block">
+                  <p><strong>Prohibited Uses</strong><br>The following actions are strictly prohibited:</p>
+                  <ul style="margin-top:6px;padding-left:16px;font-size:13px;color:var(--text);line-height:2">
+                      <li>
+                          Redistribution, resale, sharing, reuploading, or secondary distribution of the original files. This includes:
+                          <ul style="margin-top:4px;padding-left:18px;font-size:13px;color:var(--text);line-height:2">
+                              <li>Sharing assets with third parties</li>
+                              <li>Incorporating these assets into other avatars or products for resale without both parties owning a legitimate copy of the product</li>
+                              <li>VRChat pedestalization / public upload distribution</li>
+                          </ul>
+                      </li>
+                      <li>Use for political or religious activities</li>
+                      <li>Use intended to harass, defame, or slander individuals or organizations</li>
+                      <li>Fraudulent or deceptive actions toward the creator</li>
+                  </ul>
+              </div>
+              <div class="tos-block">
+                  <p><strong>Copyright</strong><br>The copyright of the 3D models, textures, and related data belongs to KissU.</p>
+                  <p style="margin-top:8px;font-size:13px;color:var(--text)">Credit is not required, but always appreciated.</p>
+              </div>
+              <div class="tos-block">
+                  <p><strong>Disclaimer</strong><br>The creator is not responsible for any damage, loss, conflicts, or issues resulting from the use of these assets.</p>
+              </div>
+              <div class="tos-block">
+                  <p><strong>Terms Updates</strong>
+                  <p style="margin-top:8px;font-size:13px;color:var(--text)">These policies and terms may be updated at any time. Updated terms apply to future purchases only and do not retroactively affect products purchased under previous versions of the Terms of Service.</p>
+              </div>
+          </div>
       </div>
-      <div class="acc-body">
-        <p class="policy-p">This website may collect customer information such as email addresses for customer support and communication purposes.</p>
-        <p class="policy-p">Personal information is not sold or shared with third parties.</p>
-        <p class="policy-p">Payments and digital product delivery may be processed through third-party services such as BOOTH, Payhip, Stripe, or other payment providers, which may process customer data according to their own privacy policies.</p>
-      </div>
-    </div>
+          <!-- Refund & Cancellation Policy accordion (отдельно, после Terms) -->
+          <div class="accordion policies-acc open" id="acc-refund_cancellation">
+              <div class="acc-header" onclick="toggleAcc('acc-refund_cancellation')">
+                  💸 Refund & Cancellation Policy
+                  <em class="acc-arrow">▼</em>
+              </div>
+              <div class="acc-body">
+                  <p class="policy-p">All products sold are digital products.</p>
+                  <p class="policy-p">Due to the nature of downloadable digital content, refunds and exchanges are generally not available after purchase.</p>
+                  <p class="policy-p">If you experience issues with your files, please contact the shop through the platform where the product was purchased (BOOTH or Payhip), or through Twitter/X for assistance.</p>
+              </div>
+          </div>
 
-    <!-- Terms of Service accordion -->
-    <div class="accordion policies-acc open" id="acc-tos">
-      <div class="acc-header" onclick="toggleAcc('acc-tos')">
-        📜 Terms of Service
-        <em class="acc-arrow">▼</em>
-      </div>
-      <div class="acc-body">
-        <div class="tos-block">
-          <p><strong>About</strong><br>This store provides digital 3D assets, VRChat assets, textures, accessories, and related downloadable content. All products are digital downloads only. No physical products are shipped.</p>
-        </div>
-        <div class="tos-block">
-          <p><strong>License &amp; Personal Use</strong><br>You may:</p>
-          <ul style="margin-top:6px;padding-left:16px;font-size:13px;color:var(--text);line-height:2">
-            <li>Use the assets for personal use</li>
-            <li>Modify models and textures for personal use</li>
-            <li>Create private edits or commission work, provided both the buyer and creator own a legitimate copy of the asset</li>
-          </ul>
-          <p style="margin-top:8px;font-size:13px;color:var(--text)">We cannot provide support for issues caused by unsupported models or personal modifications.</p>
-        </div>
-        <div class="tos-block">
-          <p><strong>Commercial Use</strong><br>Commercial use in games, video productions, streams/content creation, merchandise, and publications may be permitted upon request.</p>
-        </div>
-        <div class="tos-block">
-          <p><strong>Prohibited Uses</strong><br>The following actions are strictly prohibited:</p>
-          <ul style="margin-top:6px;padding-left:16px;font-size:13px;color:var(--text);line-height:2">
-            <li>Redistribution, resale, sharing, reuploading, or secondary distribution of the original files. This includes:
-              <ul style="margin-top:4px;padding-left:18px;font-size:13px;color:var(--text);line-height:2">
-                <li>Sharing assets with third parties</li>
-                <li>Incorporating these assets into other avatars or products for resale without both parties owning a legitimate copy of the product</li>
-                <li>VRChat pedestalization / public upload distribution</li>
-              </ul>
-            </li>
-            <li>Use for political or religious activities</li>
-            <li>Use intended to harass, defame, or slander individuals or organizations</li>
-            <li>Fraudulent or deceptive actions toward the creator</li>
-          </ul>
-        </div>
-        <div class="tos-block">
-          <p><strong>Copyright</strong><br>The copyright of the 3D models, textures, and related data belongs to KissU.</p>
-          <p style="margin-top:8px;font-size:13px;color:var(--text)">Credit is not required, but always appreciated.</p>
-        </div>
-        <div class="tos-block">
-          <p><strong>Disclaimer</strong><br>The creator is not responsible for any damage, loss, conflicts, or issues resulting from the use of these assets.</p>
-        </div>
-        <div class="tos-block">
-          <p><strong>Terms Updates</strong><br>By purchasing, downloading, or using these assets, you agree to the current Policies and Terms of Service.</p>
-          <p style="margin-top:8px;font-size:13px;color:var(--text)">These policies and terms may be updated at any time. Updated terms apply to future purchases only and do not retroactively affect products purchased under previous versions of the Terms of Service.</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Twitter follow notice (separate block, styled like the top notice) -->
-    <div class="panel">
-      <div class="tos-note" style="margin-bottom:0;text-align:center">
-        <span class="jp">𓆩♡𓆪 新しいコスチュームやプレゼント企画の情報もTwitterで発信しています。よろしければフォローしていただけると嬉しいです！𓆩♡𓆪</span><br><br>
-        I also post updates about new costumes and giveaway events on Twitter. I'd be happy if you followed me!
-      </div>
-      <div style="text-align:center;margin-top:14px">
-        <a class="mail-btn" href="https://x.com/kisugakii" target="_blank" rel="noopener">𝕏 Follow @kisugakii</a>
-      </div>
-    </div>
+          <!-- Twitter follow notice (separate block, styled like the top notice) -->
+          <div class="panel">
+              <div class="tos-note" style="margin-bottom:0;text-align:center">
+                  <span class="jp">𓆩♡𓆪 新しいコスチュームやプレゼント企画の情報もTwitterで発信しています。よろしければフォローしていただけると嬉しいです！𓆩♡𓆪</span><br><br>
+                  I also post updates about new costumes and giveaway events on Twitter. I'd be happy if you followed me!
+              </div>
+              <div style="text-align:center;margin-top:14px">
+                  <a class="mail-btn" href="https://x.com/kisugakii" target="_blank" rel="noopener">𝕏 Follow @kisugakii</a>
+              </div>
+          </div>
 
-  </div>
+      </div>
 
   <!-- ══════════════ SUPPORT & CONTACT PAGE ══════════════ -->
   <div class="page" id="page-contact">
@@ -1540,6 +1668,82 @@ html { touch-action: manipulation; }
     </div>
   </div>
 
+  <!-- ══════════════ COMMERCIAL DISCLOSURE PAGE ══════════════ -->
+  <div class="page" id="page-disclosure">
+    <div class="panel">
+      <div class="panel-title">Commercial Disclosure</div>
+      <div class="tos-note" style="margin-bottom:0">
+        <span class="jp">特定商取引法に基づく表記</span><br><br>
+        Business information disclosed in accordance with applicable consumer protection and e-commerce regulations.
+      </div>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>📦 Delivery Information</h4>
+      <p>All products are instant digital downloads delivered electronically through the platform where the product was purchased.</p>
+      <p>No physical products are shipped.</p>
+      <p>Products are typically available immediately after purchase.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>💳 Accepted Payment Methods</h4>
+      <p>Payment methods depend on the platform where the product is purchased, such as BOOTH or Payhip.</p>
+      <p>Available payment methods may include:</p>
+      <ul>
+        <li>Credit / debit cards</li>
+        <li>PayPal</li>
+        <li>Local payment methods supported by the platform</li>
+      </ul>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>⏱ Payment Period</h4>
+      <p>Payments are processed according to the payment platform used during checkout.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>💴 Pricing</h4>
+      <p>Product prices are listed individually on each storefront or product page.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>➕ Additional Fees</h4>
+      <p>No additional fees are charged by this website beyond the listed product price.</p>
+      <p>Customers may be subject to payment processing or platform-related fees depending on the payment provider or storefront used.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>🔄 Exchanges, Cancellations &amp; Returns</h4>
+      <p>Please refer to the <a href="#" onclick="showPage('tos',null);return false;">Policies &amp; TOS</a> page for detailed information regarding refunds, exchanges, cancellations, and support.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>🔒 Privacy Policy &amp; Terms of Service</h4>
+      <p>Please refer to the <a href="#" onclick="showPage('tos',null);return false;">Policies &amp; TOS</a> page for detailed information regarding privacy policies and terms of service.</p>
+    </div>
+
+    <div class="disclosure-card">
+      <h4>🏢 Business Information</h4>
+      <dl class="biz-info-grid">
+          <dt>Shop Name</dt>
+          <dd>KissU</dd>
+
+          <dt>Contact Email</dt>
+          <dd><a href="mailto:kisugakii@gmail.com">kisugakii@gmail.com</a></dd>
+          <dt>Accepted Contact Methods</dt>
+          <dd>BOOTH, Payhip, Twitter / X, Email</dd>
+          <dt>Legal Name</dt>
+          <dd>Will be disclosed without delay upon request.</dd>
+          <dt>Address</dt>
+          <dd>Will be disclosed without delay upon request.</dd>
+          <dt>Phone Number</dt>
+          <dd>Will be disclosed without delay upon request.</dd>
+          <dt>Representative / Head of Operations</dt>
+          <dd>Konstantin Igorevich</dd>
+      </dl>
+    </div>
+  </div>
+
   <footer>All rights reserved by KissU & Kissugaki ✦</footer>
 
 </div>
@@ -1547,8 +1751,9 @@ html { touch-action: manipulation; }
 <script>
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  if (btn) document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  var pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1689,5 +1894,11 @@ function kissuReset() {
 }
 
 </script>
+<!-- Bottom-right legal links over the sand -->
+<div class="legal-links">
+  <a href="#" onclick="showPage('tos',null);return false;">Policies &amp; TOS</a>
+  <a href="#" onclick="showPage('disclosure',null);return false;">Commercial Disclosure</a>
+</div>
+
 </body>
 </html>
